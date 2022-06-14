@@ -25,5 +25,10 @@ export default async function () {
   const accounts = robonomics.accountManager.getAccounts();
   robonomics.accountManager.selectAccountByAddress(accounts[0].address);
 
+  robonomics.accountManager.useSubscription(
+    robonomics.accountManager.account.address,
+    robonomics.accountManager.account.address
+  );
+
   return robonomics;
 }
