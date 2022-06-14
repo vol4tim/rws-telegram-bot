@@ -10,7 +10,6 @@ export default async function (address) {
   const devices = result.map((item) => {
     return encodeAddress(item.toHuman(), 32);
   });
-  console.log(devices);
 
   const newAddress = encodeAddress(address, 32);
   if (!devices.includes(newAddress)) {

@@ -1,6 +1,7 @@
 import { Robonomics, AccountManager } from "robonomics-interface";
 import { Keyring } from "@polkadot/keyring";
 import { ENDPOINT, SECRET } from "./config";
+import logger from "./logger";
 
 let robonomics;
 
@@ -17,7 +18,7 @@ export default async function () {
   );
 
   await robonomics.run();
-  console.log("Robonomics started");
+  logger.info("Robonomics started");
 
   robonomics.accountManager.keyring.addFromUri(SECRET);
   AccountManager.setReady(true);

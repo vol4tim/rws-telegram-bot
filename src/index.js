@@ -3,6 +3,7 @@ import { validateAddress } from "@polkadot/util-crypto";
 import rws from "./rws";
 import User from "./models/user";
 import db from "./models/db";
+import logger from "./logger";
 
 async function runApp() {
   bot.start((ctx) => {
@@ -20,7 +21,7 @@ async function runApp() {
     try {
       validateAddress(address);
     } catch (error) {
-      console.log(error);
+      logger.error("validateAddress", error);
       return ctx.reply(error.message);
     }
 
@@ -31,7 +32,7 @@ async function runApp() {
 
     try {
       const result = await rws(address);
-      console.log(result);
+      logger.info("result", result);
 
       User.create({
         userId: ctx.from.id,
@@ -42,7 +43,7 @@ async function runApp() {
 
       ctx.reply(`Ok`);
     } catch (error) {
-      console.log(error);
+      logger.error("save", error);
       return ctx.reply(error.message);
     }
   });
