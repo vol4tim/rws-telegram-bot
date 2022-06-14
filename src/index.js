@@ -7,8 +7,8 @@ import logger from "./logger";
 
 async function runApp() {
   bot.start((ctx) => {
-    return ctx.reply(
-      "Hello. For subscription send your address of Robonomics."
+    return ctx.replyWithHTML(
+      "Welcome to Robonomics Workshop! Please insert your Robonomics Parachain address, you can find correct address format <a href='https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frobonomics.api.onfinality.io%2Fpublic-ws#/accounts'>on substrate portal connected to Robonomics parachain public node</a>."
     );
   });
   bot.on("text", async (ctx) => {
@@ -22,7 +22,9 @@ async function runApp() {
       validateAddress(address);
     } catch (error) {
       logger.error("validateAddress", error);
-      return ctx.reply(error.message);
+      return ctx.replyWithHTML(
+        "Wrong address format. Please find your correct parachain address <a href='https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frobonomics.api.onfinality.io%2Fpublic-ws#/accounts'>on substrate portal connected to Robonomics parachain public node</a>"
+      );
     }
 
     const isAddress = await User.findOne({ where: { address: address } });
@@ -41,7 +43,9 @@ async function runApp() {
         block: result.blockNumber,
       });
 
-      ctx.reply(`Ok`);
+      ctx.reply(
+        `Address ${address} was successfully added to subscription! Please <a href='https://dapp.robonomics.network/lights-up'>go to Lights up (d)app</a>`
+      );
     } catch (error) {
       logger.error("save", error);
       return ctx.reply(error.message);
