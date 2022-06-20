@@ -1,6 +1,6 @@
 import bot from "./bot";
 import { validateAddress } from "@polkadot/util-crypto";
-import rws from "./rws";
+import * as rws from "./rws";
 import User from "./models/user";
 import db from "./models/db";
 import logger from "./logger";
@@ -12,11 +12,6 @@ async function runApp() {
     );
   });
   bot.on("text", async (ctx) => {
-    const user = await User.findOne({ where: { userId: ctx.from.id } });
-    if (user) {
-      return ctx.reply(`You already have a subscription`);
-    }
-
     const address = ctx.message.text.trim();
     try {
       validateAddress(address);
@@ -32,23 +27,45 @@ async function runApp() {
       return ctx.reply(`You already have a subscription`);
     }
 
-    try {
-      const result = await rws(address);
-      logger.info("result", result);
+    const user = await User.findOne({ where: { userId: ctx.from.id } });
+    if (user) {
+      // return ctx.reply(`You already have a subscription`);
 
-      User.create({
-        userId: ctx.from.id,
-        username: ctx.from.username,
-        address: address,
-        block: result.blockNumber,
-      });
+      try {
+        const result = await rws.update(user.address, address);
+        logger.info("result", result);
 
-      ctx.reply(
-        `Address ${address} was successfully added to subscription! Please <a href='https://dapp.robonomics.network/lights-up'>go to Lights up (d)app</a>`
-      );
-    } catch (error) {
-      logger.error("save", error);
-      return ctx.reply(error.message);
+        user.update({
+          address: address,
+          block: result.blockNumber,
+        });
+
+        ctx.replyWithHTML(
+          `Your current address ${address} was successfully added to subscription! Please <a href='https://dapp.robonomics.network/lights-up'>go to Lights up (d)app</a>`
+        );
+      } catch (error) {
+        logger.error("save", error);
+        return ctx.reply(error.message);
+      }
+    } else {
+      try {
+        const result = await rws.add(address);
+        logger.info("result", result);
+
+        User.create({
+          userId: ctx.from.id,
+          username: ctx.from.username,
+          address: address,
+          block: result.blockNumber,
+        });
+
+        ctx.replyWithHTML(
+          `Address ${address} was successfully added to subscription! Please <a href='https://dapp.robonomics.network/lights-up'>go to Lights up (d)app</a>`
+        );
+      } catch (error) {
+        logger.error("save", error);
+        return ctx.reply(error.message);
+      }
     }
   });
 
