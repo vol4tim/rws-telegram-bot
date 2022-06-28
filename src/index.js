@@ -41,7 +41,7 @@ async function runApp() {
         });
 
         ctx.replyWithHTML(
-          `Your current address ${address} was successfully added to subscription! Please <a href='https://dapp.robonomics.network/lights-up'>go to Lights up (d)app</a>`
+          `Your current address ${address} was successfully added to subscription! Please <a href='https://dapp.robonomics.network/#/lights-up'>go to Lights up (d)app</a>`
         );
       } catch (error) {
         logger.error("save", error);
@@ -60,7 +60,7 @@ async function runApp() {
         });
 
         ctx.replyWithHTML(
-          `Address ${address} was successfully added to subscription! Please <a href='https://dapp.robonomics.network/lights-up'>go to Lights up (d)app</a>`
+          `Address ${address} was successfully added to subscription! Please <a href='https://dapp.robonomics.network/#/lights-up'>go to Lights up (d)app</a>`
         );
       } catch (error) {
         logger.error("save", error);
