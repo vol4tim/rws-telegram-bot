@@ -44,7 +44,7 @@ async function runApp() {
           `Your current address ${address} was successfully added to subscription! Please <a href='https://dapp.robonomics.network/#/lights-up'>go to Lights up (d)app</a>`
         );
       } catch (error) {
-        logger.error(`save | ${user.address} | ${address}`, error);
+        logger.error(`update | ${user.address} | ${address}`, error);
         return ctx.reply(error.message);
       }
     } else {
@@ -63,7 +63,7 @@ async function runApp() {
           `Address ${address} was successfully added to subscription! Please <a href='https://dapp.robonomics.network/#/lights-up'>go to Lights up (d)app</a>`
         );
       } catch (error) {
-        logger.error("save", error);
+        logger.error(`add ${address}`, error);
         return ctx.reply(error.message);
       }
     }
