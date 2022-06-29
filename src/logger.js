@@ -24,8 +24,8 @@ const options = {
     format: winston.format.combine(
       winston.format.colorize(),
       winston.format.timestamp(),
-      winston.format.printf(({ level, message, timestamp }) => {
-        return `[${level}] ${timestamp}: ${message}`;
+      winston.format.printf(({ level, message, timestamp, ...meta }) => {
+        return `[${level}] ${timestamp}: ${message} \n${JSON.stringify(meta)}`;
       })
     ),
   },
